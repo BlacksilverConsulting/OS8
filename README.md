@@ -99,11 +99,11 @@ When the installation is complete, the Reboot System button in the lower-right w
 
 ![Image](/images/21-InstallComplete.png)
 
-Click it and the install media will be ejected as the VM reboots. After the reboot, the OS boot menu will be displayed for a few seconds. 
-
-![Image](/images/22-OSBootMenu.png)
+Click it and the install media will be ejected as the VM reboots. Wait while the OS starts. 
 
 The VM will display some startup information and end with a mostly-blank screen and a login prompt in the upper-left corner.
+
+![Image](/images/22-OSLoginPrompt.png)
 
 ## Ansible Bootstrap
 
