@@ -106,7 +106,7 @@ After the OS is installed, there are a lot of setup steps. This project includes
 Sign in to the VM as root and run this command:
 
 ```bash
-cd && curl -LJO https://blacksilverconsulting.github.io/OS9/start.sh && bash start.sh
+cd && curl -LJO https://blacksilverconsulting.github.io/OS8/start.sh && bash start.sh
 ```
 
 This shell script does three things only:
@@ -123,7 +123,7 @@ The shell script ends with instructions for downloading and running two addition
 Use this playbook to install PostgreSQL 14 Server and Client from CentOS9 Stream with some opinionated defaults.
 
 ```bash
-cd && curl -LJO https://github.com/BlacksilverConsulting/OS9/raw/main/pg14.yaml && ansible-playbook ./pg14.yaml
+cd && curl -LJO https://github.com/BlacksilverConsulting/OS8/raw/main/pg14.yaml && ansible-playbook ./pg14.yaml
 ```
 
 ## (Optional) Document Management Support
@@ -131,7 +131,7 @@ cd && curl -LJO https://github.com/BlacksilverConsulting/OS9/raw/main/pg14.yaml 
 Linux-based document management systems benefit from using this playbook to pre-install many useful components.
 
 ```bash
-cd && curl -LJO https://github.com/BlacksilverConsulting/OS9/raw/main/dm.yaml && ansible-playbook ./dm.yaml
+cd && curl -LJO https://github.com/BlacksilverConsulting/OS8/raw/main/dm.yaml && ansible-playbook ./dm.yaml
 ```
 
 ## Next steps
