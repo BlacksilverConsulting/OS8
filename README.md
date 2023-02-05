@@ -33,7 +33,7 @@ We will only be making changes in four of the eleven parts of the installation s
 
 ![Image](/images/04-RootPassword1.png)
 
-Enter the same strong password in both fields, and uncheck the **Lock root account** option. Then click the Done button in the upper-left-corner to return to the installation summary.
+Enter the same strong password in both fields. Then click the Done button in the upper-left-corner to return to the installation summary.
 
 ![Image](/images/06-InstallMenu2.png)
 
