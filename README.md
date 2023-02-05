@@ -75,17 +75,11 @@ Click **IPv4 Settings** to open that tab and change how the network adapter is a
 
 Click the Save button in the lower-left corner to return to the Network & Host Name screen.
 
-![Image](/images/16-Network3.png)
-
 _Done with Network & Host Name_. Click the Done button in the upper-left corner to return to the installation summary.
 
 ![Image](/images/17-InstallMenu5.png)
 
-Click the Begin Installation button in the lower-right corner of the installation summary, and the installation will begin.
-
-![Image](/images/18-InstallProgress1.png)
-
-Wait while the installer prepares the disk.
+Click the Begin Installation button in the lower-right corner of the installation summary, and the installation will begin. Wait while the installer prepares the disk.
 
 ![Image](/images/19-InstallProgress2.png)
 
