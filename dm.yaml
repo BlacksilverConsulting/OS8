@@ -6,7 +6,7 @@
 
   vars:
     appgroupname: imaging
-    powertoolsreponame: crb
+    powertoolsreponame: PowerTools
 
   handlers:
   - name: Restart FTP server
@@ -185,25 +185,25 @@
       value: read
       pretty_print: yes
 
-  - name: Enable Code Ready Linux Builder (CRB) (Was PowerTools)
+  - name: Install RPM signing key for PowerTools
+    rpm_key:
+      key: http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-Official
+      state: present
+  
+  - name: Configure CentOS PowerTools repository
     yum_repository:
       name: "{{ powertoolsreponame }}"
-      file: "centos"
-      description: "CentOS Stream $releasever - CRB"
-      metalink: "https://mirrors.centos.org/metalink?repo=centos-crb-$stream&arch=$basearch&protocol=https,http"
-      gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial"
-      gpgcheck: yes
-      repo_gpgcheck: no
-      metadata_expire: "6h"
-      enabled: yes
-
-  - name: Install packages from Code Ready Linux Builder (was PowerTools)
+      description: CentOS PowerTools
+      mirrorlist: http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra
+      state: present
+  
+  - name: Install packages from PowerTools
     yum:
       name:
       - gperf.x86_64
       - gsm-devel.x86_64
       - jbigkit-devel.x86_64
-      - latex2html.noarch
+      - latex2html.x86_64
       - lcms2-devel.x86_64
       - libtiff-tools.x86_64
       - libv41-devel.x86_64
@@ -216,6 +216,7 @@
       - texinfo.x86_64
       - texinfo-tex.x86_64
       state: latest
+      enablerepo: "{{ powertoolsreponame }}"
 
   - name: install cpan modules
     cpanm:
