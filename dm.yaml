@@ -7,6 +7,9 @@
   vars:
     appgroupname: imaging
     powertoolsreponame: PowerTools
+    # CentOS 8 Stream has both 3.6 and 3.9 installed,
+    #  but only 3.6 has the firewall module
+    ansible_python_interpreter: /usr/bin/python3.6
 
   handlers:
   - name: Restart FTP server
