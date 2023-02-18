@@ -188,6 +188,15 @@
       value: read
       pretty_print: yes
 
+# We add the CentOS 8 Stream PowerTools repo
+# entirely from scratch instead of just enabling
+# the existing one, because its name will vary
+# across different distributions, and I don't
+# want to track them all down.
+
+# Explicitly adding the signing key for this repo
+# is done for the same reason.
+
   - name: Install RPM signing key for PowerTools
     rpm_key:
       key: http://mirror.centos.org/centos/RPM-GPG-KEY-CentOS-Official
