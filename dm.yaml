@@ -104,7 +104,7 @@
       - 'perl-Archive-Zip'
       - 'perl-XML-XPath'
       - 'perl-Compress-Raw-Zlib'
-      - 'perl-Term-ReadLine'
+      - 'perl-Term-ReadLine-Gnu'
       - 'perl-LWP-Protocol-https'
       - 'perl-JSON-PP'
       - 'perl-String-ShellQuote'
