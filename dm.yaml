@@ -6,7 +6,7 @@
 
   vars:
     appgroupname: imaging
-    powertoolsreponame: PowerTools
+    powertoolsreponame: CentOSStreamPowerTools
     # CentOS 8 Stream has both 3.6 and 3.9 installed,
     #  but only 3.6 has the firewall module
     ansible_python_interpreter: /usr/bin/python3.6
@@ -196,8 +196,10 @@
   - name: Configure CentOS PowerTools repository
     yum_repository:
       name: "{{ powertoolsreponame }}"
-      description: CentOS PowerTools
-      mirrorlist: http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=PowerTools&infra=$infra
+      description: PowerTools from CentOS Stream 8
+      enabled: true
+      gpgcheck: true
+      mirrorlist: http://mirrorlist.centos.org/?release=$stream&arch=$basearch&repo=PowerTools&infra=$infra
       state: present
   
   - name: Install packages from PowerTools
