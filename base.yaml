@@ -1,10 +1,7 @@
 ---
-- name: Core congfiguration for CentOS 9
+- name: Core congfiguration for CentOS 8
   hosts: localhost
   remote_user: root
-
-# This is a mess and needs to be re-thought.
-# I suspect @server-product-environment now has GUI dependencies :(
 
   vars:
     unprivuser: support
@@ -68,7 +65,7 @@
 
   - name: Configure authorized_keys for unpriviledged account
     get_url:
-      url: https://blacksilverconsulting.github.io/OS9/authorized_keys
+      url: https://blacksilverconsulting.github.io/OS8/authorized_keys
       owner: "{{unprivuser}}"
       group: "{{unprivuser}}"
       mode: "0600"
