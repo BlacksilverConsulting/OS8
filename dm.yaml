@@ -268,16 +268,25 @@
     - 'XML::Compile::SOAP::Daemon::AnyDaemon'
     - 'XML::Tidy'
 
-  - name: Install APF 3.02 SDK
+  - name: Install APF 3.02
     unarchive:
-      dest: /var/www/html
-      src: https://github.com/BlacksilverConsulting/OS8/raw/main/apf_3.02_sdk.zip
+      dest:       /var/www/html
+      creates:    /var/www/html/apf_3.02_sdk
+      src:        https://github.com/BlacksilverConsulting/OS8/raw/main/apf_3.02_sdk.zip
       remote_src: yes
 
   - name: Install APF Skins
     unarchive:
-      dest: /var/www/html
-      src: https://github.com/BlacksilverConsulting/OS8/raw/main/apf_skin.zip
+      dest:       /var/www/html
+      creates:    /var/www/html/apf_skin
+      src:        https://github.com/BlacksilverConsulting/OS8/raw/main/apf_skin.zip
+      remote_src: yes
+
+  - name: Install YUI
+    unarchive:
+      dest:       /var/www/html
+      creates:    /var/www/html/yui
+      src:        https://github.com/BlacksilverConsulting/OS8/raw/main/yui-2.9.0.tgz
       remote_src: yes
 
 ...
