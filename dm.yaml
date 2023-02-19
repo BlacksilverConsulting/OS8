@@ -268,4 +268,16 @@
     - 'XML::Compile::SOAP::Daemon::AnyDaemon'
     - 'XML::Tidy'
 
+  - name: Install APF 3.02 SDK
+    unarchive:
+      dest: /var/www/html
+      src: https://github.com/BlacksilverConsulting/OS8/raw/main/apf_3.02_sdk.zip
+      remote_src: yes
+
+  - name: Install APF Skins
+    unarchive:
+      dest: /var/www/html
+      src: https://github.com/BlacksilverConsulting/OS8/raw/main/apf_skin.zip
+      remote_src: yes
+
 ...
