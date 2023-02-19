@@ -70,3 +70,10 @@
     yum:
       name: "perl-DBD-Pg"
       state: latest
+
+  - name: Add Ansible support for PostgreSQL configuration
+    community.general.ansible_galaxy_install:
+      name: community.postgresql
+      type: collection
+
+...
