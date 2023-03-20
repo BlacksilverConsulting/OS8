@@ -109,21 +109,20 @@ Sign in to the VM as root and run this command:
 cd && curl -LJO https://blacksilverconsulting.github.io/OS8/start.sh && bash start.sh
 ```
 
-This shell script does three things only:
+This shell script does this:
 - Enable the EPEL repository
 - Install Ansible and required dependencies
-- Download and run the base [Ansible Playbook](/base.yaml)
+- Download the base, PostgreSQL, and dm playbooks
+- Run the base playbook
 
-(To see what that playbook does, click the link.)
-
-The shell script ends with instructions for downloading and running two additional Ansible playbooks which are still works in progress.
+The shell script ends with instructions for running two additional Ansible playbooks.
 
 ## (Optional) PostgreSQL 14 Server and Client
 
-Use this playbook to install PostgreSQL 14 Server and Client from CentOS9 Stream with some opinionated defaults.
+Use this playbook to install PostgreSQL 14 Server and Client with some opinionated defaults.
 
 ```bash
-cd && curl -LJO https://github.com/BlacksilverConsulting/OS8/raw/main/pg14.yaml && ansible-playbook ./pg14.yaml
+ansible-playbook ./pg14.yaml
 ```
 
 ## (Optional) Document Management Support
@@ -131,7 +130,7 @@ cd && curl -LJO https://github.com/BlacksilverConsulting/OS8/raw/main/pg14.yaml 
 Linux-based document management systems benefit from using this playbook to pre-install many useful components.
 
 ```bash
-cd && curl -LJO https://github.com/BlacksilverConsulting/OS8/raw/main/dm.yaml && ansible-playbook ./dm.yaml
+ansible-playbook ./dm.yaml
 ```
 
 ## Next steps
