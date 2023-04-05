@@ -2,8 +2,9 @@
 - name: PostgreSQL 14 Client and Server
   hosts: localhost
   remote_user: root
-
-# It would be nice if "14" was coming from a variable.
+  
+# IF YOU NEED A DIFFERENT CLUSTER LOCATION, AFTER THIS PLAYBOOK, SEE:
+# https://gist.github.com/BlacksilverConsulting/cf4789bb2457ca4f56f65d4ebad5c9ab
 
   tasks:
   # We use PGDG here even though CentOS 9 has PostgreSQL 14,
