@@ -125,6 +125,8 @@ Use this playbook to install PostgreSQL 14 Server and Client from [The PostgreSQ
 ansible-playbook ./pg14.yaml
 ```
 
+See the [alternate cluster location instructions](https://gist.github.com/BlacksilverConsulting/cf4789bb2457ca4f56f65d4ebad5c9ab) after running this playbook if you need your PostgreSQL 14 cluster to be in a non-default directory.
+
 ## (Optional) Document Management Support
  
 Linux-based document management systems benefit from using this playbook to pre-install many useful components.
