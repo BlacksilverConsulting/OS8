@@ -119,7 +119,7 @@ The shell script ends with instructions for running two additional Ansible playb
 
 ## (Optional) PostgreSQL 14 Server and Client
 
-Use this playbook to install PostgreSQL 14 Server and Client with some opinionated defaults.
+Use this playbook to install PostgreSQL 14 Server and Client from [The PostgreSQL official site](https://www.postgresql.org/) with some opinionated defaults.
 
 ```bash
 ansible-playbook ./pg14.yaml
