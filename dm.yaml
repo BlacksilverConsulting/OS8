@@ -372,4 +372,6 @@
       - "{{overlay_rpms}}/groff-base-1.22.3-18.el8.x86_64.rpm"
       - "{{overlay_rpms}}/groff-perl-1.22.3-18.el8.x86_64.rpm"
       state: present
+    when: 1 == 0
+    
 ...
