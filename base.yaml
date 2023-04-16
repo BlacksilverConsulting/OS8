@@ -46,7 +46,6 @@
       - 'python3-psycopg2'
       - 'sudo'
       - 'tmpwatch'
-      - 'console-login-helper-messages-issuegen'
 
   - name: Start autofs service with OS
     service:
