@@ -5,6 +5,7 @@
   remote_user: root
 
   vars:
+    ansible_python_interpreter: /usr/bin/python3.6
     appgroupname: imaging
     powertoolsreponame: CentOSStreamPowerTools
     overlay: /root/ImgOverlay-main/var/imaging/resources
