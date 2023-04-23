@@ -1,0 +1,64 @@
+---
+- name: Tesseract OCR setup
+  hosts: localhost
+  remote_user: root
+
+  vars:
+    subsys_path: /var/imaging/subsys/Templates
+
+  tasks:
+    - name: Check for application's OCR subsystem
+      ansible.builtin.stat:
+        path: "{{ subsys_path }}"
+      register: subsys
+    
+    - name: Stop playbook if OCR subsystem is missing
+      ansible.builtin.fail:
+        msg: "OCR subsystem directory ({{ subsys_path }}) not found!"
+      when: not subsys.stat.exists
+
+    - name: Check for OCR enable flag
+      ansible.builtin.stat:
+        path: "{{ subsys_path }}/.enabled"
+      register: enabled
+
+    - name: Enable OCR subsystem
+      ansible.builtin.file:
+        path: enabled.stat.path
+        state: touch
+        owner: listener
+        group: imaging
+      when: not enabled.stat.exists
+
+    - name: Configure application path to tesseract
+      ansible.builtin.replace:
+        path: /var/imaging/resources/configs/utilities.json
+        regexp: "/usr/local/bin/tesseract"
+        replace: "/usr/bin/tesseract"
+
+    - name: Install EPEL repository
+      yum:
+        name: epel-release
+        state: present
+
+    - name: Install Tesseract OCR
+      yum:
+        name: tesseract
+        state: present
+        
+    - name: install cpan modules for OCR
+      cpanm:
+        name: "{{ item }}"
+        notest: yes
+      loop:
+      - 'IO::Interactive'
+      - 'URI::Encode'
+
+    - name: Add cronjob to auto-commit unclassified groups
+      cron:
+        name: "Auto-commit scale tickets"
+        special_time: hourly
+        user: listener
+        job: >
+          /usr/bin/perl /var/imaging/bin/img-group-autocommit.pl
+...

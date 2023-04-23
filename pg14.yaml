@@ -45,7 +45,7 @@
     # This pulls directly from GitHub instead of expecting /root/ImgOverlay-main
     #  to already exist, so this playbook is not dependent on dm.yaml.
     get_url:
-      url: https://blacksilverconsulting.github.io/OS8/psqlrc
+      url: https://github.com/BlacksilverConsulting/OS8/raw/main/psqlrc
       dest: /etc/sysconfig/pgsql/psqlrc
       mode: 0644
       group: root

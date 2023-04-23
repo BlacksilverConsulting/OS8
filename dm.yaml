@@ -5,6 +5,7 @@
   remote_user: root
 
   vars:
+    ansible_python_interpreter: /usr/bin/python3.6
     appgroupname: imaging
     powertoolsreponame: CentOSStreamPowerTools
     overlay: /root/ImgOverlay-main/var/imaging/resources
@@ -362,7 +363,22 @@
       name: imaging-cleanup
       enabled: yes
 
-# BEGIN APPLICATION SERVICE->SYSTEMD SHIM
+# END APPLICATION SERVICE->SYSTEMD SHIM
+
+  - name: Create enscript site configuration file
+    ansible.builtin.file:
+      path: /etc/enscriptsite.cfg
+      owner: root
+      group: root
+      state: touch
+    
+  - name: Emulate a2ps site configuration file
+    ansible.builtin.file:
+      src: /etc/enscriptsite.cfg
+      dest: /etc/a2ps-site.cfg
+      state: link
+      owner: root
+      group: root
 
   - name: Install our built packages from the overlay
     yum:
@@ -371,4 +387,6 @@
       - "{{overlay_rpms}}/groff-base-1.22.3-18.el8.x86_64.rpm"
       - "{{overlay_rpms}}/groff-perl-1.22.3-18.el8.x86_64.rpm"
       state: present
+    when: 1 == 0
+    
 ...
