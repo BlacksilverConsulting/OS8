@@ -7,12 +7,16 @@
 # https://gist.github.com/BlacksilverConsulting/cf4789bb2457ca4f56f65d4ebad5c9ab
 
   tasks:
-  # We use PostgreSQL 13 from the OS repo here instead of PGDG, so 
+  # We use PostgreSQL 10 from the OS repo here instead of PGDG, so
   # that it also works on locked-down RHEL installations.
 
-  - name: Install PostgreSQL 13 client
+  - name: Install PostgreSQL 10
     yum:
-      name: "postgresql13"
+      name:
+      - postgresql
+      - postgresql-server
+      - perl-DBD-Pg
+      - python3-psycopg2
       state: latest
       update_cache: yes
 
@@ -38,17 +42,11 @@
       group: root
       owner: root
 
-  - name: Install PostgreSQL 13 server
-    yum:
-      name: "@postgresqldbserver13"
-      state: latest
-      disablerepo: appstream
-
-  - name: Add PostgreSQL 13 service dependency on autofs
+   - name: Add PostgreSQL 10 service dependency on autofs
     # This is needed for configurations where the DB cluster
     #  is on a disk that is mounted by autofs
     ini_file:
-      path: /etc/systemd/system/postgresql-13.service.d/override.conf
+      path: /etc/systemd/system/postgresql.service.d/override.conf
       section: Unit
       option: after
       value: "autofs.service"
@@ -64,12 +62,6 @@
       job: >
         /bin/bash -c 'for db in $(/bin/psql -AqtX -U postgres -d postgres -c "SELECT datname FROM pg_Database WHERE datAllowConn;"); do /bin/psql -q -d $db -c "VACUUM ANALYZE;"; done'
 
-  - name: Install Python 3.9 module for PostgreSQL
-    # This is needed for community.postgresql to work
-    yum:
-      name: "python39-psycopg2"
-      state: latest
-
   - name: Add Ansible support for PostgreSQL configuration
     # This is needed for dm.yaml to create application-specific
     #  database users
@@ -79,16 +71,16 @@
 
   - name: Check if PostgreSQL cluster is initialized
     ansible.builtin.stat:
-      path: /var/lib/pgsql/13/data/pg_hba.conf
-    register: pg13data
+      path: /var/lib/pgsql/data/pg_hba.conf
+    register: pg10data
 
   - name: Initialize PostgreSQL cluster
-    shell: "postgresql-13-setup initdb"
-    when: not pg13data.stat.exists
+    shell: "postgresql-setup initdb"
+    when: not pg10data.stat.exists
  
   - name: Start and enable PostgreSQL service
     service: 
-      name: postgresql-13 
+      name: postgresql 
       state: started 
       enabled: yes
 
