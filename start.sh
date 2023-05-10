@@ -27,7 +27,7 @@ ansible-collection-redhat-rhel_mgmt
 
 echo 'Download the playbooks'
 curl -LJO https://github.com/BlacksilverConsulting/OS8/raw/main/base.yaml
-curl -LJO https://github.com/BlacksilverConsulting/OS8/raw/main/pg14.yaml
+curl -LJO https://github.com/BlacksilverConsulting/OS8/raw/main/pg13.yaml
 curl -LJO https://github.com/BlacksilverConsulting/OS8/raw/main/dm.yaml
 
 echo 'Run the base playbook'
@@ -35,8 +35,8 @@ ansible-playbook ./base.yaml
 
 echo 'Initial configuration complete.'
 
-echo 'To install PostgreSQL 14 Server and Client:'
-echo 'ansible-playbook ./pg14.yaml'
+echo 'To install PostgreSQL 13 Server and Client:'
+echo 'ansible-playbook ./pg13.yaml'
 
 echo 'To install other components useful for document management:'
 echo 'ansible-playbook ./dm.yaml'
