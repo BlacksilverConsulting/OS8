@@ -42,7 +42,7 @@
       group: root
       owner: root
 
-   - name: Add PostgreSQL 10 service dependency on autofs
+  - name: Add PostgreSQL 10 service dependency on autofs
     # This is needed for configurations where the DB cluster
     #  is on a disk that is mounted by autofs
     ini_file:

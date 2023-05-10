@@ -51,21 +51,6 @@
     become: yes
     become_user: postgres
 
-  - name: Add systemd service alias for PostgreSQL 14
-    # This is needed for application-specific automation
-    #  that expects `service postgresql stop` to work
-    file:
-      src: /usr/lib/systemd/system/postgresql-14.service
-      state: link
-      path: /usr/lib/systemd/system/postgresql.service
-
-  - name: Create /var/lib/pgsql/data symlink
-    # This is needed for sysupdate.pl to complete
-    file:
-      state: link
-      src: /var/lib/pgsql/14/data
-      path: /var/lib/pgsql/data
-
   - name: Create fake init.d file
     # This is required for sysupdate 2005091601 to work correctly.
     file:
