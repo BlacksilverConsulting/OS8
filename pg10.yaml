@@ -1,5 +1,5 @@
 ---
-- name: PostgreSQL 13 Client and Server
+- name: PostgreSQL 10 Client and Server
   hosts: localhost
   remote_user: root
   
