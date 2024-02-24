@@ -7,86 +7,105 @@
     unprivuser: support
 
   tasks:
-  - name: Workaround libstoragemgmt dependency
+    - name: Workaround libstoragemgmt dependency
     # This package (at least in CentOS 8 Stream)
     #  has a weird thing where another package
     #  not only depends on it, but depends on it
     #  having already been installed. So we install
     #  it first, and separately, to work around the
     #  problem.
-    yum:
-      name:
-      - 'libstoragemgmt'
-      state: latest
+      ansible.builtin.yum:
+        name:
+          - libstoragemgmt
+        state: present
 
-  - name: Install environment package groups
-    yum:
-      name:
-      - "@server-product-environment"
-      state: present
+    - name: Install environment package groups
+      ansible.builtin.yum:
+        name:
+          - "@server-product-environment"
+        state: present
 
-  - name: Install regular package groups
-    yum:
-      name:
-      - "@development"
-      - "@headless-management"
-      state:  present
+    - name: Install regular package groups
+      ansible.builtin.yum:
+        name:
+          - "@development"
+          - "@headless-management"
+        state: present
 
-  - name: Install individual packages
-    yum:
-      name:
-      - 'autofs'
-      - 'bind-utils'
-      - 'htop'
-      - 'lftp'
-      - 'lsof'
-      - 'openssh-server'
-      - 'python3-firewall'
-      - 'python3-lxml'
-      - 'python3-psycopg2'
-      - 'sudo'
-      - 'tmpwatch'
+    - name: Install individual packages
+      ansible.builtin.yum:
+        name:
+          - autofs
+          - bind-utils
+          - htop
+          - lftp
+          - lsof
+          - openssh-server
+          - python3-firewall
+          - python3-lxml
+          - python3-psycopg2
+          - sudo
+          - tmpwatch
 
-  - name: Start autofs service with OS
-    service:
-      name: autofs
-      enabled: yes
-      state: started
+    - name: Start autofs service with OS
+      ansible.builtin.service:
+        name: autofs
+        enabled: true
+        state: started
 
-  - name: Configure lftp
-    lineinfile:
-      path: /etc/lftp.conf
-      create: yes
-      owner: root
-      group: root
-      mode: "0644"
-      line: "{{ item }}"
-    loop:
-    - "set ftp:ssl-force false"
-    - "set ftp:ssl-protect-data true"
-    - "set ssl:verify-certificate no"
+    - name: Configure lftp
+      ansible.builtin.lineinfile:
+        path: /etc/lftp.conf
+        create: true
+        owner: root
+        group: root
+        mode: "0644"
+        line: "{{ item }}"
+      loop:
+        - set ftp:ssl-force false
+        - set ftp:ssl-protect-data true
+        - set ssl:verify-certificate no
 
-  - name: Create unpriviledged account
-    user:
-      name: "{{unprivuser}}"
+    - name: Create unpriviledged account
+      ansible.builtin.user:
+        name: "{{ unprivuser }}"
 
-  - name: Add Blacksilver Consulting key to support account
-    lineinfile:
-      backup: true 
-      create: true 
-      group: "{{unprivuser}}"
-      line: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCY8Mo4HYMVhDhvRusQhuLleBwX/1wZGKU7KUpepCF4d0+J3XNj4+w0nsft+oQfUUSh91Gx3AXCng8S54uJc29LCJb4thJ3G5LpSn1D3TGcLg++O7FN2gcVr5YVKWgv55qp3z/KjmiWDooq7wvtO00JRKzCbPcC5VetV2pLNS0flPvZGU1h908dPqYVHbHPJ+1BO/4+d07lHIsPG6re8OVmfHKb1K6C30GFo1SLIneJD4etIFWllEVOOU5GIgKU3JkeYzsPIK6o90nzJ9yu4PdbNIY4lHc8rYBwOcCq6eoqyL5p/qcJNyxTRkp4b4HE5n9sJytkLvAaJbPEeLyoKPdd rsa-key-20220410"
-      mode: "0600"
-      owner: "{{unprivuser}}"
-      path: "/home/{{unprivuser}}/.ssh"
-      search_string: "rsa-key-20220410"
+          #    - name: Add Blacksilver Consulting key to support account
+          #      ansible.builtin.lineinfile:
+          #        backup: true
+          #        create: true
+          #        group: "{{ unprivuser }}"
+          #                  line: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCY8Mo4HYMVhDh\
+          #                         vRusQhuLleBwX/1wZGKU7KUpepCF4d0+J3XNj4+w0nsft+oQfUU\
+          #                         Sh91Gx3AXCng8S54uJc29LCJb4thJ3G5LpSn1D3TGcLg++O7FN2\
+          #                         gcVr5YVKWgv55qp3z/KjmiWDooq7wvtO00JRKzCbPcC5VetV2pL\
+          #                         NS0flPvZGU1h908dPqYVHbHPJ+1BO/4+d07lHIsPG6re8OVmfHK\
+          #                         b1K6C30GFo1SLIneJD4etIFWllEVOOU5GIgKU3JkeYzsPIK6o90\
+          #                         nzJ9yu4PdbNIY4lHc8rYBwOcCq6eoqyL5p/qcJNyxTRkp4b4HE5\
+          #                         n9sJytkLvAaJbPEeLyoKPdd rsa-key-20220410"
+          #          #        mode: "0600"
+          #        owner: "{{ unprivuser }}"
+          #        path: /home/{{ unprivuser }}/.ssh
+          #        search_string: rsa-key-20220410
 
-  - name: Disable SELinux
-    ini_file:
-      path: /etc/selinux/config
-      section: null
-      option: SELINUX
-      value: disabled
-      no_extra_spaces: yes
+    - name: Add Blacksilver Consulting key to support account
+      ansible.posix.authorized_key:
+        user: "{{ unprivuser }}"
+        state: present
+        manage_dir: true
+        key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCY8Mo4HYMVhDhvRusQhuLleB\
+          wX/1wZGKU7KUpepCF4d0+J3XNj4+w0nsft+oQfUUSh91Gx3AXCng8S54uJc29LCJb4\
+          thJ3G5LpSn1D3TGcLg++O7FN2gcVr5YVKWgv55qp3z/KjmiWDooq7wvtO00JRKzCbP\
+          cC5VetV2pLNS0flPvZGU1h908dPqYVHbHPJ+1BO/4+d07lHIsPG6re8OVmfHKb1K6C\
+          30GFo1SLIneJD4etIFWllEVOOU5GIgKU3JkeYzsPIK6o90nzJ9yu4PdbNIY4lHc8rY\
+          BwOcCq6eoqyL5p/qcJNyxTRkp4b4HE5n9sJytkLvAaJbPEeLyoKPdd rsa-key-202\
+          20410"
 
-...
+    - name: Disable SELinux
+      community.general.ini_file:
+        path: /etc/selinux/config
+        mode: "u+rw,g+r,o+r"
+        section:
+        option: SELINUX
+        value: disabled
+        no_extra_spaces: true
