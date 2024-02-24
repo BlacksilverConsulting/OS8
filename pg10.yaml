@@ -2,86 +2,89 @@
 - name: PostgreSQL 10 Client and Server
   hosts: localhost
   remote_user: root
-  
-# IF YOU NEED A DIFFERENT CLUSTER LOCATION, AFTER THIS PLAYBOOK, SEE:
-# https://gist.github.com/BlacksilverConsulting/cf4789bb2457ca4f56f65d4ebad5c9ab
+
+  # IF YOU NEED A DIFFERENT CLUSTER LOCATION, AFTER THIS PLAYBOOK, SEE:
+  # https://gist.github.com/BlacksilverConsulting/cf4789bb2457ca4f56f65d4ebad5c9ab
 
   tasks:
   # We use PostgreSQL 10 from the OS repo here instead of PGDG, so
   # that it also works on locked-down RHEL installations.
 
-  - name: Install PostgreSQL 10
-    yum:
-      name:
-      - postgresql
-      - postgresql-server
-      - perl-DBD-Pg
-      - python3-psycopg2
-      state: latest
-      update_cache: yes
+    - name: Install PostgreSQL 10
+      ansible.builtin.yum:
+        name:
+          - postgresql
+          - postgresql-server
+          - perl-DBD-Pg
+          - python3-psycopg2
+        state: present
+        update_cache: true
 
-  - name: Create PostgreSQL client system-wide configuration directory
-    # This is needed for the CLI configuration file that is 
+    - name: Create PostgreSQL client system-wide configuration directory
+    # This is needed for the CLI configuration file that is
     #  about to be installed
-    file:
-      path: /etc/sysconfig/pgsql
-      state: directory
-      group: root
-      owner: root
-      mode: 0755
+      ansible.builtin.file:
+        path: /etc/sysconfig/pgsql
+        state: directory
+        group: root
+        owner: root
+        mode: "0755"
 
-  - name: Configure PostgreSQL client CLI
+    - name: Configure PostgreSQL client CLI
     # This makes psql much nicer to work with, things like
     #  persistent history and a special symbol (¤) for nulls
     # This pulls directly from GitHub instead of expecting /root/ImgOverlay-main
     #  to already exist, so this playbook is not dependent on dm.yaml.
-    get_url:
-      url: https://github.com/BlacksilverConsulting/OS8/raw/main/psqlrc
-      dest: /etc/sysconfig/pgsql/psqlrc
-      mode: 0644
-      group: root
-      owner: root
+      ansible.builtin.get_url:
+        url: https://github.com/BlacksilverConsulting/OS8/raw/main/psqlrc
+        dest: /etc/sysconfig/pgsql/psqlrc
+        mode: "0644"
+        group: root
+        owner: root
 
-  - name: Add PostgreSQL 10 service dependency on autofs
+    - name: Add PostgreSQL 10 service dependency on autofs
     # This is needed for configurations where the DB cluster
     #  is on a disk that is mounted by autofs
-    ini_file:
-      path: /etc/systemd/system/postgresql.service.d/override.conf
-      section: Unit
-      option: after
-      value: "autofs.service"
-      no_extra_spaces: yes
+      community.general.ini_file:
+        path: /etc/systemd/system/postgresql.service.d/override.conf
+        section: Unit
+        option: after
+        value: autofs.service
+        mode: "0644"
+        no_extra_spaces: true
 
-  - name: Add cronjob to vacuum databases regularly
-    # This is needed to comfort grumpy old DBAs that don't 
+    - name: Add cronjob to vacuum databases regularly
+    # This is needed to comfort grumpy old DBAs that don't
     #  trust autovacuum yet
-    cron:
-      name: "Nightly database vacuum"
-      special_time: daily
-      user: postgres
-      job: >
-        /bin/bash -c 'for db in $(/bin/psql -AqtX -U postgres -d postgres -c "SELECT datname FROM pg_Database WHERE datAllowConn;"); do /bin/psql -q -d $db -c "VACUUM ANALYZE;"; done'
+      ansible.builtin.cron:
+        name: Nightly database vacuum
+        special_time: daily
+        user: postgres
+        job: >
+          /bin/bash -c 'for db in $(/bin/psql -AqtX -U postgres -d postgres
+          -c "SELECT datname FROM pg_Database WHERE datAllowConn;");
+          do /bin/psql -q -d $db -c "VACUUM ANALYZE;"; done'
 
-  - name: Add Ansible support for PostgreSQL configuration
+    - name: Add Ansible support for PostgreSQL configuration
     # This is needed for dm.yaml to create application-specific
     #  database users
-    community.general.ansible_galaxy_install:
-      name: community.postgresql
-      type: collection
+      community.general.ansible_galaxy_install:
+        name: community.postgresql
+        type: collection
 
-  - name: Check if PostgreSQL cluster is initialized
-    ansible.builtin.stat:
-      path: /var/lib/pgsql/data/pg_hba.conf
-    register: pg10data
+    - name: Check if PostgreSQL cluster is initialized
+      ansible.builtin.stat:
+        path: /var/lib/pgsql/data/pg_hba.conf
+      register: pg10data
 
-  - name: Initialize PostgreSQL cluster
-    shell: "postgresql-setup initdb"
-    when: not pg10data.stat.exists
- 
-  - name: Start and enable PostgreSQL service
-    service: 
-      name: postgresql 
-      state: started 
-      enabled: yes
+    - name: Initialize PostgreSQL cluster
+      ansible.builtin.command: postgresql-setup initdb
+      when: not pg10data.stat.exists
+      register: initdb
+      changed_when: initdb.rc == 0
 
-...
+    - name: Start and enable PostgreSQL service
+      ansible.builtin.service:
+        name: postgresql
+        state: started
+        enabled: true
