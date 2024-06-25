@@ -21,7 +21,7 @@ echo 'Enable EPEL'
 dnf -y install epel-release epel-next-release
 
 echo 'Install Ansible and dependencies'
-dnf -y install python3 python3-rpm python3-pycurl sshpass ansible-core \
+dnf -y install python3 python3-rpm python3-pycurl ansible \
 ansible-collection-ansible-posix ansible-collection-community-general \
 ansible-collection-redhat-rhel_mgmt 
 
