@@ -109,3 +109,8 @@
         option: SELINUX
         value: disabled
         no_extra_spaces: true
+
+    - name: Add Ansible support for OpenSSH key generation
+      community.general.ansible_galaxy_install:
+        name: community.crypto
+        type: collection
